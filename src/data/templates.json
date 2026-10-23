@@ -1,0 +1,46 @@
+[
+  {
+    "id": "adventure",
+    "name": "Adventure",
+    "description": "Chain-driven tourers and ADVs — Himalayan, Scram, 390 Adventure",
+    "items": [
+      { "name": "Engine oil", "intervalKm": 3000, "intervalMonths": 6 },
+      { "name": "Chain clean & lube", "intervalKm": 600 },
+      { "name": "Chain adjust", "intervalKm": 1000 },
+      { "name": "Brake pads inspect", "intervalKm": 5000 },
+      { "name": "Air filter", "intervalKm": 10000 },
+      { "name": "Spark plug", "intervalKm": 10000 },
+      { "name": "Coolant", "intervalMonths": 24 },
+      { "name": "Tyres inspect", "intervalKm": 5000 }
+    ]
+  },
+  {
+    "id": "naked",
+    "name": "Naked / Sport",
+    "description": "Street nakeds and sport bikes — Duke, MT-15, Ninja",
+    "items": [
+      { "name": "Engine oil", "intervalKm": 3000, "intervalMonths": 6 },
+      { "name": "Chain clean & lube", "intervalKm": 600 },
+      { "name": "Chain adjust", "intervalKm": 1000 },
+      { "name": "Brake pads inspect", "intervalKm": 5000 },
+      { "name": "Air filter", "intervalKm": 10000 },
+      { "name": "Spark plug", "intervalKm": 10000 },
+      { "name": "Coolant", "intervalMonths": 24 },
+      { "name": "Tyres inspect", "intervalKm": 5000 }
+    ]
+  },
+  {
+    "id": "scooter",
+    "name": "Scooter",
+    "description": "CVT scooters, no chain — Activa, Jupiter, Ntorq",
+    "items": [
+      { "name": "Engine oil", "intervalKm": 3000, "intervalMonths": 6 },
+      { "name": "Brake pads inspect", "intervalKm": 5000 },
+      { "name": "Air filter", "intervalKm": 10000 },
+      { "name": "Spark plug", "intervalKm": 10000 },
+      { "name": "Coolant", "intervalMonths": 24 },
+      { "name": "Tyres inspect", "intervalKm": 5000 },
+      { "name": "CVT belt", "intervalKm": 20000 }
+    ]
+  }
+]

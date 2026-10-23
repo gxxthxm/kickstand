@@ -1,0 +1,199 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
+@import '@fontsource/barlow-condensed/500.css';
+@import '@fontsource/barlow-condensed/600.css';
+@import '@fontsource/barlow-condensed/700.css';
+
+@custom-variant light (&:where(.light, .light *));
+
+/* ---------------------------------------------------------------------------
+   Tokens. Dark-first: graphite background, near-black cards, signal orange.
+   Status colours always ship with an icon and a label.
+   --------------------------------------------------------------------------- */
+:root {
+  --bg: #131417;
+  --bg-raised: #191b1f;
+  --card: #0b0c0e;
+  --well: #16181c;
+  --line: #2a2d33;
+  --line-strong: #3b3f47;
+  --fg: #f3f2ee;
+  --muted: #a3a8b0;
+  --faint: #868b94;
+  --accent: #ff6b1a;
+  --accent-ink: #ff8f52;
+  --on-accent: #111214;
+  --overdue: #ff5d55;
+  --soon: #ffb224;
+  --ok: #3dd68c;
+  --info: #7cb2ff;
+  --chart-grid: #26292e;
+  --shadow: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 10px 30px -12px rgb(0 0 0 / 0.6);
+  color-scheme: dark;
+}
+
+.light {
+  --bg: #f1f0ec;
+  --bg-raised: #f8f7f4;
+  --card: #ffffff;
+  --well: #f1f0ec;
+  --line: #dcdad3;
+  --line-strong: #c4c1b8;
+  --fg: #16181b;
+  --muted: #4d525a;
+  --faint: #62676f;
+  --accent: #f26a1b;
+  --accent-ink: #b0440a;
+  --on-accent: #111214;
+  --overdue: #b3241c;
+  --soon: #9a5700;
+  --ok: #176b3a;
+  --info: #1f5fbf;
+  --chart-grid: #e7e5df;
+  --shadow: 0 1px 2px rgb(20 20 20 / 0.06), 0 8px 24px -14px rgb(20 20 20 / 0.25);
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-raised: var(--bg-raised);
+  --color-card: var(--card);
+  --color-well: var(--well);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-on-accent: var(--on-accent);
+  --color-overdue: var(--overdue);
+  --color-soon: var(--soon);
+  --color-ok: var(--ok);
+  --color-info: var(--info);
+  --shadow-card: var(--shadow);
+}
+
+@theme {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Barlow Condensed', 'Arial Narrow', ui-sans-serif, sans-serif;
+  --radius-card: 1.25rem;
+  --animate-pulse-once: pulse-once 1.4s ease-out 1;
+}
+
+@keyframes pulse-once {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--pulse-colour, var(--soon)) 70%, transparent);
+  }
+  70% {
+    box-shadow: 0 0 0 14px color-mix(in oklab, var(--pulse-colour, var(--soon)) 0%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+@layer base {
+  html {
+    background: var(--bg);
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    min-height: 100dvh;
+    font-feature-settings: 'cv11', 'ss01';
+    overflow-x: hidden;
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent-ink);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--accent) 35%, transparent);
+  }
+}
+
+@utility num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+@utility font-display {
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+
+@utility label-caps {
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+}
+@keyframes sheet-out {
+  to {
+    transform: translateY(100%);
+  }
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    scale: 0.96;
+  }
+}
+
+/* Cost categories (never reuse status colours for data). */
+:root {
+  --cat-fuel: #ff7a2e;
+  --cat-service: #6aa8ff;
+  --cat-parts: #b892ff;
+  --cat-documents: #4fd1c1;
+}
+.light {
+  --cat-fuel: #e8590c;
+  --cat-service: #2f6fd6;
+  --cat-parts: #7b4fd6;
+  --cat-documents: #0f8f80;
+}
