@@ -18,8 +18,8 @@ export default defineConfig({
         short_name: 'Kickstand',
         description:
           'Service schedules, fuel economy, rides, papers and costs for every bike you own.',
-        theme_color: '#141518',
-        background_color: '#141518',
+        theme_color: '#09090b',
+        background_color: '#09090b',
         display: 'standalone',
         orientation: 'portrait',
         start_url: './',

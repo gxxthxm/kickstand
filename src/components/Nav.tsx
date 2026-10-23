@@ -1,4 +1,4 @@
-import { ChartColumn, Plus, Settings as SettingsIcon, Warehouse } from 'lucide-react';
+import { BookOpen, ChartColumn, Plus, Settings as SettingsIcon, Warehouse } from 'lucide-react';
 import { useMemo } from 'react';
 import { NavLink, useLocation } from 'react-router';
 import { attentionList } from '@/lib/garage';
@@ -13,60 +13,69 @@ import { Button } from './ui/button';
 
 const LINKS = [
   { to: '/', label: 'Garage', icon: Warehouse, end: true },
+  { to: '/logbook', label: 'Logbook', icon: BookOpen, end: false },
   { to: '/costs', label: 'Costs', icon: ChartColumn, end: false },
   { to: '/settings', label: 'Settings', icon: SettingsIcon, end: false },
 ];
 
-/** Mobile bottom tab bar: Garage, Log +, Costs, Settings. */
+/** Mobile bottom tab bar: Garage, Logbook, [+], Costs, Settings — the log button dead centre. */
 export function BottomNav() {
   const openLog = useOpenLog();
   const { pathname } = useLocation();
-  const item = (l: (typeof LINKS)[number]) => (
-    <NavLink
-      key={l.to}
-      to={l.to}
-      end={l.end}
-      className={({ isActive }) =>
-        cn(
-          'flex h-14 flex-1 flex-col items-center justify-center gap-0.5 text-[0.6875rem] font-semibold tracking-wide transition-colors',
-          isActive || (l.to === '/' && pathname.startsWith('/bikes'))
-            ? 'text-fg'
-            : 'text-faint hover:text-muted',
-        )
-      }
-    >
-      {({ isActive }) => (
-        <>
-          <l.icon
-            aria-hidden
-            className={cn(
-              'size-[1.375rem]',
-              (isActive || (l.to === '/' && pathname.startsWith('/bikes'))) && 'text-accent-ink',
-            )}
-          />
-          {l.label}
-        </>
-      )}
-    </NavLink>
-  );
+  const item = (l: (typeof LINKS)[number]) => {
+    const forceActive = l.to === '/' && pathname.startsWith('/bikes');
+    return (
+      <NavLink
+        key={l.to}
+        to={l.to}
+        end={l.end}
+        className={({ isActive }) =>
+          cn(
+            'flex h-16 min-w-0 flex-1 flex-col items-center justify-center gap-1 text-[0.6875rem] font-medium transition-colors',
+            isActive || forceActive ? 'text-fg' : 'text-faint hover:text-muted',
+          )
+        }
+      >
+        {({ isActive }) => (
+          <>
+            <span
+              className={cn(
+                'grid h-7 w-12 place-items-center rounded-full transition-colors',
+                (isActive || forceActive) && 'bg-well',
+              )}
+            >
+              <l.icon
+                aria-hidden
+                className="size-5"
+                strokeWidth={isActive || forceActive ? 2.25 : 1.75}
+              />
+            </span>
+            {l.label}
+          </>
+        )}
+      </NavLink>
+    );
+  };
   return (
     <nav
       aria-label="Main"
-      className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-line bg-bg-raised/90 backdrop-blur-lg md:hidden"
+      className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-line bg-bg-raised/85 backdrop-blur-xl md:hidden"
     >
-      <div className="mx-auto flex max-w-lg items-stretch px-2">
+      <div className="mx-auto grid max-w-lg grid-cols-5 items-center px-1">
         {item(LINKS[0])}
-        <div className="flex flex-1 items-start justify-center">
+        {item(LINKS[1])}
+        <div className="flex justify-center">
           <button
             type="button"
             onClick={() => openLog()}
-            className="-mt-5 flex h-14 cursor-pointer items-center gap-1.5 rounded-full bg-accent px-5 font-display text-lg font-bold tracking-wide text-on-accent uppercase shadow-[0_8px_24px_-6px_color-mix(in_oklab,var(--accent)_70%,transparent)] ring-4 ring-bg transition-transform active:scale-95"
+            aria-label="Quick log"
+            className="grid size-[3.25rem] cursor-pointer place-items-center rounded-full bg-accent text-on-accent shadow-[0_6px_20px_-6px_color-mix(in_oklab,var(--accent)_60%,transparent)] transition-transform hover:scale-105 active:scale-95"
           >
-            Log <Plus aria-hidden className="size-5" strokeWidth={3} />
+            <Plus aria-hidden className="size-6" strokeWidth={2.5} />
           </button>
         </div>
-        {item(LINKS[1])}
         {item(LINKS[2])}
+        {item(LINKS[3])}
       </div>
     </nav>
   );
@@ -83,11 +92,7 @@ export function Sidebar() {
       <NavLink to="/" className="px-2" aria-label="Kickstand home">
         <Logo />
       </NavLink>
-      <Button
-        size="lg"
-        onClick={() => openLog()}
-        className="w-full font-display text-lg tracking-wide uppercase"
-      >
+      <Button size="lg" onClick={() => openLog()} className="w-full font-display text-lg">
         <Plus strokeWidth={3} /> Log
       </Button>
       <nav aria-label="Main" className="flex flex-col gap-1">

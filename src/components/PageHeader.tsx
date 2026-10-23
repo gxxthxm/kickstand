@@ -15,10 +15,8 @@ export function PageHeader({
   return (
     <header className={cn('flex items-end justify-between gap-4 pt-6 pb-5 md:pt-10', className)}>
       <div className="min-w-0">
-        {eyebrow && <p className="label-caps">{eyebrow}</p>}
-        <h1 className="font-display text-[2.75rem] leading-[0.95] font-bold tracking-wide uppercase md:text-6xl">
-          {title}
-        </h1>
+        {eyebrow && <p className="mb-1 text-sm font-medium text-muted">{eyebrow}</p>}
+        <h1 className="font-display text-4xl leading-tight font-semibold md:text-5xl">{title}</h1>
       </div>
       {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
     </header>
@@ -59,7 +57,7 @@ export function EmptyState({
           {icon}
         </div>
       )}
-      <p className="font-display text-2xl font-semibold tracking-wide">{title}</p>
+      <p className="font-display text-2xl font-semibold">{title}</p>
       {children && <div className="mt-1 max-w-sm text-sm text-muted">{children}</div>}
       {actions && <div className="mt-5 flex flex-wrap justify-center gap-2">{actions}</div>}
     </div>

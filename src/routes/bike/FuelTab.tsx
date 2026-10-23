@@ -122,7 +122,7 @@ export default function FuelTab({ bike }: { bike: Bike }) {
           <h2 className="label-caps">Fuel economy · {label}</h2>
           <span className="flex items-center gap-3 text-xs text-faint">
             <span className="inline-flex items-center gap-1.5">
-              <span className="h-0.5 w-4 rounded bg-accent" /> per tank
+              <span className="h-0.5 w-4 rounded bg-accent-line" /> per tank
             </span>
             <span className="inline-flex items-center gap-1.5">
               <span className="w-4 border-t-2 border-dashed border-muted" /> average

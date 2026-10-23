@@ -289,9 +289,7 @@ function BikeForm() {
         {!editing && (
           <Card className="flex flex-col gap-4 p-4 sm:p-5">
             <fieldset>
-              <legend className="mb-1 font-display text-xl font-semibold tracking-wide uppercase">
-                Service schedule
-              </legend>
+              <legend className="mb-1 font-display text-xl font-semibold">Service schedule</legend>
               <p className="mb-3 text-sm text-muted">
                 Start from a template — you can add, edit or switch off items later.
               </p>
@@ -310,7 +308,7 @@ function BikeForm() {
                     className={cn(
                       'cursor-pointer rounded-2xl border p-3.5 text-left transition-colors',
                       template === t.id
-                        ? 'border-accent bg-[color-mix(in_oklab,var(--accent)_10%,transparent)]'
+                        ? 'border-accent-line bg-[color-mix(in_oklab,var(--accent)_10%,transparent)]'
                         : 'border-line hover:border-line-strong',
                     )}
                   >

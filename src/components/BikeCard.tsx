@@ -51,12 +51,12 @@ export function BikeCard({ bike, health, top }: BikeCardProps) {
           </p>
           <h3
             id={`bike-${bike.id}-name`}
-            className="mt-0.5 flex items-center gap-1 font-display text-3xl leading-tight font-semibold"
+            className="mt-0.5 font-display text-[1.75rem] leading-[1.1] font-semibold break-words"
           >
-            <span className="truncate">{bike.nickname}</span>
+            {bike.nickname}
             <ChevronRight
               aria-hidden
-              className="size-5 shrink-0 text-faint transition-transform group-hover:translate-x-0.5"
+              className="ml-0.5 inline size-5 -translate-y-0.5 text-faint transition-transform group-hover:translate-x-0.5"
             />
           </h3>
           <Odometer value={bike.odometer} size="sm" className="mt-2" />

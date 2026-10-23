@@ -28,7 +28,12 @@ interface Point {
 }
 
 /** km/l (or l/100km) per full-to-full reading, with the average as a dashed line. */
-export default function EconomyChart({ readings, average, unit, colour = 'var(--accent)' }: Props) {
+export default function EconomyChart({
+  readings,
+  average,
+  unit,
+  colour = 'var(--accent-line)',
+}: Props) {
   const data: Point[] = readings.map((r) => ({
     date: r.date,
     odometer: r.odometer,

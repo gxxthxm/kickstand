@@ -15,7 +15,7 @@ export function AppShell() {
     root.classList.toggle('dark', theme === 'dark');
     document
       .querySelector('meta[name="theme-color"]')
-      ?.setAttribute('content', theme === 'light' ? '#f1f0ec' : '#141518');
+      ?.setAttribute('content', theme === 'light' ? '#f4f4f5' : '#09090b');
   }, [theme]);
 
   // New screen → start at the top (the quick-log sheet keeps its background in place).
@@ -54,7 +54,7 @@ export function AppShell() {
             fontFamily: 'var(--font-sans)',
           },
           classNames: {
-            title: 'font-display! text-lg! font-semibold! tracking-wide',
+            title: 'font-display! text-lg! font-semibold!',
             description: 'text-muted! num',
             actionButton: 'bg-accent! text-on-accent! font-semibold! h-9! px-3! rounded-full!',
           },

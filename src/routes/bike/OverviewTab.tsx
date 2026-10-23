@@ -1,14 +1,14 @@
 import { useMemo } from 'react';
-import { ChevronRight, Fuel, Gauge, Route as RouteIcon, TrendingDown, Wrench } from 'lucide-react';
+import { ChevronRight, TrendingDown } from 'lucide-react';
 import { Link } from 'react-router';
 import { costBreakdown, monthlyCosts } from '@/lib/costs';
 import type { Health } from '@/lib/due';
 import { formatEconomy, fuelStats } from '@/lib/fuel';
-import { formatDate, formatKm, formatMoney, formatMoneyPrecise } from '@/lib/format';
-import { activityFor, bikeDocs, bikeItems, type Activity } from '@/lib/garage';
+import { formatDate, formatMoney, formatMoneyPrecise } from '@/lib/format';
+import { activityFor, bikeDocs, bikeItems } from '@/lib/garage';
 import type { Bike, GarageData } from '@/lib/types';
-import { useData, useEconomyUnit, useToday } from '@/store/hooks';
-import { useUI } from '@/store/ui';
+import { useData, useEconomyReadings, useEconomyUnit, useToday } from '@/store/hooks';
+import { ActivityRow } from '@/components/ActivityRow';
 import { ItemRow } from '@/components/ItemRow';
 import { StatTile } from '@/components/StatTile';
 import { StatusBadge } from '@/components/StatusBadge';
@@ -34,6 +34,7 @@ export function OverviewTab({ bike, health }: { bike: Bike; health: Health }) {
   const costs = useMemo(() => costBreakdown(data, bike.id), [data, bike.id]);
   const docs = useMemo(() => bikeDocs(data, bike.id, today), [data, bike.id, today]);
   const activity = useMemo(() => activityFor(data, bike.id).slice(0, 6), [data, bike.id]);
+  const readings = useEconomyReadings(data.fuel);
 
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
@@ -74,7 +75,7 @@ export function OverviewTab({ bike, health }: { bike: Bike; health: Health }) {
             <Card>
               <ul className="divide-y divide-line">
                 {activity.map((a) => (
-                  <ActivityRow key={`${a.kind}-${a.id}`} a={a} data={data} />
+                  <ActivityRow key={`${a.kind}-${a.id}`} a={a} data={data} readings={readings} />
                 ))}
               </ul>
             </Card>
@@ -165,65 +166,4 @@ function firstDate(data: GarageData, bikeId: string): string | undefined {
     .filter((r) => r.bikeId === bikeId)
     .map((r) => r.date)
     .sort()[0];
-}
-
-const ICONS = { fuel: Fuel, ride: RouteIcon, service: Wrench, reading: Gauge } as const;
-
-function ActivityRow({ a, data }: { a: Activity; data: GarageData }) {
-  const openEditor = useUI((s) => s.openEditor);
-  const unit = useEconomyUnit();
-  const Icon = ICONS[a.kind];
-  let title: string;
-  let sub: string;
-  if (a.kind === 'fuel') {
-    const f = data.fuel.find((x) => x.id === a.id);
-    const r = fuelStats(data.fuel.filter((x) => x.bikeId === f?.bikeId)).readings.find(
-      (x) => x.entryId === a.id,
-    );
-    title = `${f?.litres.toFixed(2)} l ${f?.fullTank ? 'full tank' : 'top-up'}`;
-    sub = [formatMoney(f?.amount ?? 0), r && formatEconomy(r.kmpl, unit)]
-      .filter(Boolean)
-      .join(' · ');
-  } else if (a.kind === 'ride') {
-    const r = data.rides.find((x) => x.id === a.id);
-    title = r?.title ?? 'Ride';
-    sub = r ? formatKm(r.endKm - r.startKm) : '';
-  } else if (a.kind === 'service') {
-    const s = data.services.find((x) => x.id === a.id);
-    const names =
-      s?.itemIds.map((id) => data.schedule.find((i) => i.id === id)?.name).filter(Boolean) ?? [];
-    title = names.length
-      ? names.slice(0, 2).join(', ') + (names.length > 2 ? ` +${names.length - 2}` : '')
-      : 'Service';
-    sub = [
-      s?.where,
-      s && s.partsCost + s.labourCost > 0 ? formatMoney(s.partsCost + s.labourCost) : null,
-    ]
-      .filter(Boolean)
-      .join(' · ');
-  } else {
-    title = 'Odometer updated';
-    sub = formatKm(a.odometer);
-  }
-  return (
-    <li>
-      <button
-        type="button"
-        onClick={() => openEditor({ kind: a.kind, id: a.id })}
-        className="flex min-h-14 w-full cursor-pointer items-center gap-3 px-4 py-2.5 text-left hover:bg-well/60"
-      >
-        <span className="grid grid-cols-1 size-9 shrink-0 place-items-center rounded-full bg-well text-accent-ink">
-          <Icon aria-hidden className="size-4" />
-        </span>
-        <span className="min-w-0 flex-1">
-          <span className="block truncate text-sm font-semibold">{title}</span>
-          <span className="num block truncate text-xs text-muted">{sub}</span>
-        </span>
-        <span className="num shrink-0 text-right text-xs text-faint">
-          {formatDate(a.date)}
-          <span className="block">{formatKm(a.odometer)}</span>
-        </span>
-      </button>
-    </li>
-  );
 }

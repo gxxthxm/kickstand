@@ -49,10 +49,7 @@ export function SheetContent({
         <div className="flex shrink-0 items-start gap-3 px-5 pt-3 pb-2 md:pt-5">
           <div className="min-w-0 flex-1">
             <DialogPrimitive.Title
-              className={cn(
-                'font-display text-2xl font-semibold tracking-wide',
-                hideTitle && 'sr-only',
-              )}
+              className={cn('font-display text-2xl font-semibold', hideTitle && 'sr-only')}
             >
               {title}
             </DialogPrimitive.Title>

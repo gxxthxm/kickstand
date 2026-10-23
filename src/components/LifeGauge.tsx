@@ -45,7 +45,7 @@ export function LifeGauge({
       <span
         aria-hidden
         className={cn(
-          'font-display text-xs font-bold',
+          'font-mono text-[0.6875rem] font-semibold',
           status === 'Overdue' ? 'text-overdue' : 'text-faint',
         )}
       >
@@ -63,7 +63,7 @@ export function LifeGauge({
           />
         ))}
       </div>
-      <span aria-hidden className="font-display text-xs font-bold text-faint">
+      <span aria-hidden className="font-mono text-[0.6875rem] font-semibold text-faint">
         F
       </span>
     </div>

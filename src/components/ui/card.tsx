@@ -14,13 +14,5 @@ export function Card({ className, ...props }: ComponentProps<'div'>) {
 }
 
 export function SectionTitle({ className, ...props }: ComponentProps<'h2'>) {
-  return (
-    <h2
-      className={cn(
-        'font-display text-xl font-semibold tracking-wide text-fg uppercase',
-        className,
-      )}
-      {...props}
-    />
-  );
+  return <h2 className={cn('font-display text-lg font-semibold text-fg', className)} {...props} />;
 }

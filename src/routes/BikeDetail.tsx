@@ -81,7 +81,7 @@ export default function BikeDetail() {
               <p className="truncate text-sm font-medium text-muted">
                 {bike.year} {bike.make} {bike.model}
               </p>
-              <h1 className="font-display text-[2.5rem] leading-[0.92] font-bold tracking-wide break-words uppercase sm:text-5xl md:text-6xl">
+              <h1 className="font-display text-4xl leading-tight font-semibold break-words md:text-5xl">
                 {bike.nickname}
               </h1>
               <Odometer value={bike.odometer} size="md" className="mt-3" />
@@ -132,7 +132,7 @@ export default function BikeDetail() {
                 <Tabs.Trigger
                   key={t.value}
                   value={t.value}
-                  className="relative h-12 shrink-0 cursor-pointer px-3.5 text-sm font-semibold text-faint transition-colors after:absolute after:inset-x-3 after:bottom-0 after:h-0.5 after:rounded-full hover:text-fg data-[state=active]:text-fg data-[state=active]:after:bg-accent"
+                  className="relative h-12 shrink-0 cursor-pointer px-3.5 text-sm font-semibold text-faint transition-colors after:absolute after:inset-x-3 after:bottom-0 after:h-0.5 after:rounded-full hover:text-fg data-[state=active]:text-fg data-[state=active]:after:bg-accent-line"
                 >
                   {t.label}
                 </Tabs.Trigger>

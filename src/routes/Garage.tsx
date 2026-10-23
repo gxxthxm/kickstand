@@ -117,10 +117,7 @@ export default function Garage() {
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,25rem)] lg:items-start">
           <section aria-labelledby="attention-title" className="lg:sticky lg:top-6 lg:order-2">
             <div className="mb-3 flex items-baseline justify-between gap-3">
-              <h2
-                id="attention-title"
-                className="font-display text-xl font-semibold tracking-wide uppercase"
-              >
+              <h2 id="attention-title" className="font-display text-xl font-semibold">
                 Needs attention
               </h2>
               {rows.length > 0 && (
@@ -144,7 +141,7 @@ export default function Garage() {
               <div className="flex items-start gap-3 rounded-[var(--radius-card)] border border-line bg-card p-4">
                 <CircleCheck aria-hidden className="mt-0.5 size-6 shrink-0 text-ok" />
                 <div>
-                  <p className="font-display text-xl font-semibold tracking-wide">All clear</p>
+                  <p className="font-display text-xl font-semibold">All clear</p>
                   <p className="text-sm text-muted">
                     Nothing's overdue or due in the next two weeks.
                   </p>
@@ -161,10 +158,7 @@ export default function Garage() {
           </section>
 
           <section aria-labelledby="bikes-title" className="lg:order-1">
-            <h2
-              id="bikes-title"
-              className="mb-3 font-display text-xl font-semibold tracking-wide uppercase"
-            >
+            <h2 id="bikes-title" className="mb-3 font-display text-xl font-semibold">
               {data.bikes.length === 1 ? 'Your bike' : `Your bikes · ${data.bikes.length}`}
             </h2>
             <div className="grid grid-cols-1 gap-4 min-[1800px]:grid-cols-2">

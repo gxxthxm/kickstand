@@ -31,14 +31,14 @@ export function Odometer({
       role="img"
       aria-label={`${Math.round(value).toLocaleString('en-IN')} ${unit}`}
       className={cn(
-        'inline-flex items-baseline gap-1.5 font-display leading-none font-semibold',
+        'inline-flex items-baseline gap-1.5 font-mono leading-none font-medium tracking-tight',
         SIZES[size],
         className,
       )}
     >
       <span
         aria-hidden
-        className="inline-flex overflow-hidden rounded-md border border-line bg-well px-0.5"
+        className="inline-flex overflow-hidden rounded-lg border border-line bg-well px-1"
       >
         {str.split('').map((ch, i) => (
           <Drum
@@ -49,10 +49,7 @@ export function Odometer({
           />
         ))}
       </span>
-      <span
-        aria-hidden
-        className="text-[0.45em] font-semibold tracking-widest text-faint uppercase"
-      >
+      <span aria-hidden className="font-sans text-[0.5em] font-medium text-faint">
         {unit}
       </span>
     </span>
@@ -64,7 +61,7 @@ function Drum({ digit, dim, last }: { digit: number; dim: boolean; last: boolean
     <span
       className={cn(
         'relative inline-block h-[1.15em] w-[0.62em] overflow-hidden text-center',
-        !last && 'border-r border-line/60',
+        !last && 'border-r border-line/40',
         dim ? 'text-faint/50' : 'text-fg',
       )}
     >

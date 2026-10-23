@@ -48,8 +48,8 @@ export function RidesTab({ bike }: { bike: Bike }) {
   return (
     <div className="flex flex-col gap-5">
       <div className="grid grid-cols-3 gap-3">
-        <StatTile label="Distance" value={total.toLocaleString('en-IN')} unit="km" />
-        <StatTile label="Rides" value={shown.length} />
+        <StatTile size="sm" label="Distance" value={total.toLocaleString('en-IN')} unit="km" />
+        <StatTile size="sm" label="Rides" value={shown.length} />
         <StatTile
           label="Avg rating"
           value={

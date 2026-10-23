@@ -71,7 +71,7 @@ export function Chip({ pressed, onPressedChange, children, className, colour }: 
       className={cn(
         'inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full border px-3.5 text-sm font-medium transition-colors [&_svg]:size-4',
         pressed
-          ? 'border-accent-ink bg-[color-mix(in_oklab,var(--accent)_16%,transparent)] text-fg'
+          ? 'border-fg bg-fg text-bg'
           : 'border-line bg-well text-muted hover:border-line-strong hover:text-fg',
         className,
       )}

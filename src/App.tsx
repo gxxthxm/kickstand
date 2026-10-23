@@ -9,6 +9,7 @@ import type { ModalState } from '@/store/useOpenLog';
 const BikeDetail = lazy(() => import('@/routes/BikeDetail'));
 const BikeFormPage = lazy(() => import('@/routes/BikeFormPage'));
 const Costs = lazy(() => import('@/routes/Costs'));
+const Logbook = lazy(() => import('@/routes/Logbook'));
 const Settings = lazy(() => import('@/routes/Settings'));
 const NotFound = lazy(() => import('@/routes/NotFound'));
 
@@ -25,6 +26,7 @@ function AppRoutes() {
           <Route path="bikes/new" element={<BikeFormPage />} />
           <Route path="bikes/:id/edit" element={<BikeFormPage />} />
           <Route path="bikes/:id/:tab?" element={<BikeDetail />} />
+          <Route path="logbook" element={<Logbook />} />
           <Route path="costs" element={<Costs />} />
           <Route path="settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />

@@ -22,9 +22,7 @@ export function Logo({ className, compact }: { className?: string; compact?: boo
         <circle cx="16" cy="17.5" r="2.4" fill="var(--on-accent)" />
       </svg>
       {!compact && (
-        <span className="font-display text-[1.375rem] leading-none font-bold tracking-[0.08em] uppercase">
-          Kickstand
-        </span>
+        <span className="font-display text-xl leading-none font-semibold">Kickstand</span>
       )}
     </span>
   );

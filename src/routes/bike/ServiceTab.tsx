@@ -122,7 +122,7 @@ export function ServiceTab({ bike }: { bike: Bike }) {
                     aria-hidden
                     className={cn(
                       'absolute top-4 -left-[1.6875rem] size-3 rounded-full ring-4 ring-bg',
-                      s.where === 'DIY' ? 'bg-info' : 'bg-accent',
+                      s.where === 'DIY' ? 'bg-info' : 'bg-accent-line',
                     )}
                   />
                   <button

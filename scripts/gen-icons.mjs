@@ -3,8 +3,8 @@
 import { writeFileSync } from 'node:fs';
 import { deflateSync } from 'node:zlib';
 
-const ACCENT = [0xff, 0x6b, 0x1a];
-const INK = [0x11, 0x12, 0x14];
+const ACCENT = [0xc6, 0xf4, 0x32];
+const INK = [0x0a, 0x0a, 0x0a];
 
 // The mark, in the same 32×32 space as src/components/Logo.tsx.
 const C = { x: 16, y: 17.5 };

@@ -116,23 +116,93 @@ export type ActivityKind = 'fuel' | 'ride' | 'service' | 'reading';
 export interface Activity {
   kind: ActivityKind;
   id: string;
+  bikeId: string;
   date: ISODate;
   odometer: number;
+  /** Money spent on this log (fuel amount, parts + labour). */
+  cost: number;
 }
 
-/** Every log for a bike, newest first. */
-export function activityFor(data: GarageData, bikeId: string): Activity[] {
+export interface ActivityFilter {
+  bikeId?: string;
+  kinds?: ActivityKind[];
+}
+
+/** Every log across the garage (or one bike), newest first. */
+export function activity(data: GarageData, filter: ActivityFilter = {}): Activity[] {
   const out: Activity[] = [];
-  for (const f of data.fuel)
-    if (f.bikeId === bikeId)
-      out.push({ kind: 'fuel', id: f.id, date: f.date, odometer: f.odometer });
-  for (const r of data.rides)
-    if (r.bikeId === bikeId) out.push({ kind: 'ride', id: r.id, date: r.date, odometer: r.endKm });
-  for (const s of data.services)
-    if (s.bikeId === bikeId)
-      out.push({ kind: 'service', id: s.id, date: s.date, odometer: s.odometer });
-  for (const o of data.readings)
-    if (o.bikeId === bikeId)
-      out.push({ kind: 'reading', id: o.id, date: o.date, odometer: o.odometer });
+  const want = (kind: ActivityKind, bikeId: string) =>
+    (!filter.bikeId || bikeId === filter.bikeId) && (!filter.kinds || filter.kinds.includes(kind));
+  for (const f of data.fuel) {
+    if (want('fuel', f.bikeId))
+      out.push({
+        kind: 'fuel',
+        id: f.id,
+        bikeId: f.bikeId,
+        date: f.date,
+        odometer: f.odometer,
+        cost: f.amount,
+      });
+  }
+  for (const r of data.rides) {
+    if (want('ride', r.bikeId))
+      out.push({
+        kind: 'ride',
+        id: r.id,
+        bikeId: r.bikeId,
+        date: r.date,
+        odometer: r.endKm,
+        cost: 0,
+      });
+  }
+  for (const s of data.services) {
+    if (want('service', s.bikeId))
+      out.push({
+        kind: 'service',
+        id: s.id,
+        bikeId: s.bikeId,
+        date: s.date,
+        odometer: s.odometer,
+        cost: s.partsCost + s.labourCost,
+      });
+  }
+  for (const o of data.readings) {
+    if (want('reading', o.bikeId))
+      out.push({
+        kind: 'reading',
+        id: o.id,
+        bikeId: o.bikeId,
+        date: o.date,
+        odometer: o.odometer,
+        cost: 0,
+      });
+  }
   return out.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : b.odometer - a.odometer));
+}
+
+/** Every log for one bike, newest first. */
+export const activityFor = (data: GarageData, bikeId: string): Activity[] =>
+  activity(data, { bikeId });
+
+export interface ActivityMonth {
+  /** yyyy-MM */
+  month: string;
+  items: Activity[];
+  cost: number;
+}
+
+/** Group a newest-first list into calendar months, keeping order. */
+export function groupByMonth(items: Activity[]): ActivityMonth[] {
+  const groups: ActivityMonth[] = [];
+  for (const a of items) {
+    const month = a.date.slice(0, 7);
+    let g = groups[groups.length - 1];
+    if (!g || g.month !== month) {
+      g = { month, items: [], cost: 0 };
+      groups.push(g);
+    }
+    g.items.push(a);
+    g.cost += a.cost;
+  }
+  return groups;
 }
