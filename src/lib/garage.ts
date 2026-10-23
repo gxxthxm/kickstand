@@ -206,3 +206,7 @@ export function groupByMonth(items: Activity[]): ActivityMonth[] {
   }
   return groups;
 }
+
+/** Scooters carry a CVT belt instead of a chain; that's the tell in a schedule. */
+export const isScooterSchedule = (names: string[]): boolean =>
+  names.some((n) => n.toLowerCase().includes('cvt'));

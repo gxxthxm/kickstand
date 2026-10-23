@@ -22,15 +22,17 @@ export default function Garage() {
   const rows = useMemo(() => attentionList(data, today), [data, today]);
   const cards = useMemo(
     () =>
-      data.bikes.map((bike) => {
-        const items = bikeItems(data, bike, today).filter((i) => i.item.enabled);
-        return { bike, health: healthOf(data, bike, today), top: items[0] };
-      }),
+      data.bikes.map((bike) => ({
+        bike,
+        health: healthOf(data, bike, today),
+        items: bikeItems(data, bike, today),
+      })),
     [data, today],
   );
   const nextUp = useMemo(
     () =>
       cards
+        .map((c) => ({ bike: c.bike, top: c.items.find((v) => v.item.enabled) }))
         .filter((c) => c.top)
         .sort((a, b) => (a.top?.info.remaining ?? 1) - (b.top?.info.remaining ?? 1))[0],
     [cards],

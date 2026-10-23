@@ -1,12 +1,13 @@
 import { lazy, Suspense, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronLeft, Fuel, Gauge, Pencil, Route as RouteIcon, Wrench } from 'lucide-react';
+import { ChevronLeft, Pencil } from 'lucide-react';
 import { Tabs } from 'radix-ui';
 import { Link, Navigate, useNavigate, useParams } from 'react-router';
-import { healthOf } from '@/lib/garage';
+import { bikeItems, healthOf, isScooterSchedule } from '@/lib/garage';
 import { useBike, useData, useToday } from '@/store/hooks';
-import { useOpenLog } from '@/store/useOpenLog';
-import { HealthGauge } from '@/components/HealthGauge';
+import { BikeActions } from '@/components/BikeActions';
+import { BikeAvatar } from '@/components/BikeAvatar';
+import { HealthStrip } from '@/components/HealthStrip';
 import { Odometer } from '@/components/Odometer';
 import { Page } from '@/components/PageHeader';
 import { Button } from '@/components/ui/button';
@@ -34,7 +35,6 @@ export default function BikeDetail() {
   const bike = useBike(id);
   const data = useData();
   const today = useToday();
-  const openLog = useOpenLog();
   const tab: TabValue = TABS.some((t) => t.value === tabParam)
     ? (tabParam as TabValue)
     : 'overview';
@@ -52,67 +52,58 @@ export default function BikeDetail() {
     () => (bike ? healthOf(data, bike, today) : undefined),
     [data, bike, today],
   );
+  const items = useMemo(() => (bike ? bikeItems(data, bike, today) : []), [data, bike, today]);
   if (!bike || !health) return <Navigate to="/" replace />;
 
   return (
     <div>
-      <div
-        className="border-b border-line"
-        style={{
-          backgroundImage: `radial-gradient(90% 120% at 0% 0%, color-mix(in oklab, ${bike.colour} 30%, transparent), transparent 70%)`,
-        }}
-      >
+      <div className="border-b border-line">
         <Page className="pt-3 pb-5 md:pt-6">
           <div className="flex items-center justify-between">
             <Link
               to="/"
-              className="-ml-2 inline-flex min-h-11 items-center gap-1 rounded-full pr-3 pl-1 text-sm font-semibold text-muted hover:text-fg"
+              className="-ml-2 inline-flex min-h-11 items-center gap-1 rounded-full pr-3 pl-1 text-sm font-medium text-muted hover:text-fg"
             >
               <ChevronLeft className="size-5" /> Garage
             </Link>
             <Button asChild variant="ghost" size="sm">
               <Link to={`/bikes/${bike.id}/edit`}>
-                <Pencil /> Edit bike
+                <Pencil /> Edit
               </Link>
             </Button>
           </div>
-          <div className="mt-2 flex items-center gap-4">
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium text-muted">
-                {bike.year} {bike.make} {bike.model}
-              </p>
-              <h1 className="font-display text-4xl leading-tight font-semibold break-words md:text-5xl">
+
+          <div className="mt-3 flex items-center gap-4">
+            <BikeAvatar
+              colour={bike.colour}
+              size="lg"
+              scooter={isScooterSchedule(items.map((v) => v.item.name))}
+            />
+            <div className="min-w-0">
+              <h1 className="font-display text-3xl leading-tight font-semibold break-words md:text-4xl">
                 {bike.nickname}
               </h1>
-              <Odometer value={bike.odometer} size="md" className="mt-3" />
+              <p className="text-sm text-muted">
+                {bike.year} {bike.make} {bike.model}
+              </p>
             </div>
-            <HealthGauge health={health} size={104} />
           </div>
-          <div
-            className="mt-5 grid grid-cols-4 gap-2 sm:flex"
-            role="group"
-            aria-label={`Log for ${bike.nickname}`}
-          >
-            {(
-              [
-                ['fuel', 'Fuel', Fuel, 'Log fuel'],
-                ['ride', 'Ride', RouteIcon, 'Log ride'],
-                ['service', 'Service', Wrench, 'Log service'],
-                ['odometer', 'Odometer', Gauge, 'Update odometer'],
-              ] as const
-            ).map(([type, label, Icon, aria]) => (
-              <button
-                key={type}
-                type="button"
-                onClick={() => openLog(type, bike.id)}
-                aria-label={aria}
-                className="flex h-16 cursor-pointer flex-col items-center justify-center gap-1 rounded-2xl border border-line bg-well/80 text-xs font-semibold transition-colors hover:border-line-strong active:scale-95 sm:h-11 sm:flex-row sm:gap-2 sm:rounded-full sm:px-4 sm:text-sm"
-              >
-                <Icon aria-hidden className="size-5 text-accent-ink sm:size-4" />
-                <span aria-hidden>{label}</span>
-              </button>
-            ))}
+
+          <div className="mt-6 flex items-end justify-between gap-4">
+            <div>
+              <p className="label-caps">Odometer</p>
+              <Odometer value={bike.odometer} className="mt-1 text-4xl" />
+            </div>
+            <div className="text-right">
+              <p className="label-caps">Health</p>
+              <p className="num mt-1 text-2xl font-semibold tracking-tight">
+                {health.ok}
+                <span className="text-base text-faint">/{health.total} OK</span>
+              </p>
+            </div>
           </div>
+          <HealthStrip items={items} className="mt-3" />
+          <BikeActions bike={bike} className="mt-5" />
         </Page>
       </div>
 

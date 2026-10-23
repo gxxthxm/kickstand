@@ -3,68 +3,48 @@ import { cn } from '@/lib/utils';
 
 interface OdometerProps {
   value: number;
-  /** Minimum number of drums; leading zeros are dimmed like a real cluster. */
-  digits?: number;
-  size?: 'sm' | 'md' | 'lg';
   className?: string;
   unit?: string;
 }
 
-const SIZES = {
-  sm: 'text-xl',
-  md: 'text-3xl',
-  lg: 'text-5xl',
-};
-
-/** Mechanical odometer: each digit is a drum that rolls to its new value. */
-export function Odometer({
-  value,
-  digits = 6,
-  size = 'md',
-  className,
-  unit = 'km',
-}: OdometerProps) {
-  const str = Math.max(0, Math.round(value)).toString().padStart(digits, '0');
-  const firstSignificant = str.search(/[1-9]/);
+/**
+ * The odometer as a plain figure ("21,700 km") whose digits roll to a new value when it
+ * changes. Size it with text classes on className.
+ */
+export function Odometer({ value, className, unit = 'km' }: OdometerProps) {
+  const str = Math.max(0, Math.round(value)).toLocaleString('en-IN');
+  const chars = str.split('');
   return (
     <span
       role="img"
-      aria-label={`${Math.round(value).toLocaleString('en-IN')} ${unit}`}
+      aria-label={`${str} ${unit}`}
       className={cn(
-        'inline-flex items-baseline gap-1.5 font-mono leading-none font-medium tracking-tight',
-        SIZES[size],
+        'inline-flex items-baseline font-semibold tracking-tight tabular-nums',
         className,
       )}
     >
-      <span
-        aria-hidden
-        className="inline-flex overflow-hidden rounded-lg border border-line bg-well px-1"
-      >
-        {str.split('').map((ch, i) => (
-          <Drum
-            key={str.length - i}
-            digit={Number(ch)}
-            dim={firstSignificant === -1 ? i < str.length - 1 : i < firstSignificant}
-            last={i === str.length - 1}
-          />
-        ))}
+      <span aria-hidden className="inline-flex">
+        {chars.map((ch, i) =>
+          /\d/.test(ch) ? (
+            // Key from the right so existing drums keep their place as the number grows.
+            <Drum key={chars.length - i} digit={Number(ch)} />
+          ) : (
+            <span key={chars.length - i}>{ch}</span>
+          ),
+        )}
       </span>
-      <span aria-hidden className="font-sans text-[0.5em] font-medium text-faint">
+      <span aria-hidden className="ml-1 text-[0.5em] font-medium tracking-normal text-faint">
         {unit}
       </span>
     </span>
   );
 }
 
-function Drum({ digit, dim, last }: { digit: number; dim: boolean; last: boolean }) {
+function Drum({ digit }: { digit: number }) {
   return (
-    <span
-      className={cn(
-        'relative inline-block h-[1.15em] w-[0.62em] overflow-hidden text-center',
-        !last && 'border-r border-line/40',
-        dim ? 'text-faint/50' : 'text-fg',
-      )}
-    >
+    <span className="relative inline-block h-[1.2em] w-[1ch] overflow-hidden text-center">
+      {/* Invisible copy keeps the baseline aligned with surrounding text. */}
+      <span className="invisible">{digit}</span>
       <motion.span
         className="absolute inset-x-0 top-0 flex flex-col"
         initial={false}
@@ -72,7 +52,7 @@ function Drum({ digit, dim, last }: { digit: number; dim: boolean; last: boolean
         transition={{ type: 'spring', stiffness: 140, damping: 20, mass: 0.9 }}
       >
         {Array.from({ length: 10 }, (_, n) => (
-          <span key={n} className="flex h-[1.15em] items-center justify-center">
+          <span key={n} className="flex h-[1.2em] items-center justify-center">
             {n}
           </span>
         ))}
